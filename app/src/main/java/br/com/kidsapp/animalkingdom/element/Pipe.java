@@ -4,22 +4,24 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 
-public class Bird {
+public class Pipe {
     // constants
-    private final int RADIUS = 50;
+    private final int BASE = 50;
+    private final int HEIGHT = 400;
     // attributes
     private Point position = new Point();
     private Paint color = new Paint();
 
-    public Bird() {
-        this.position.set(100, 100);
+    public Pipe() {
+        this.position.set(600, 0);
         // ARGB => opacity, red, green, blue
-        this.color.setColor(0xFFFF0000);
+        this.color.setColor(0xFF00FF00);
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawCircle(position.x, position.y,
-                          RADIUS, color);
+        // left - top - right - bottom
+        canvas.drawRect((float) (position.x - (BASE/2.0)),
+                        0, (float) (BASE/2.0), HEIGHT, color);
     }
 
     public Point getPosition() {
