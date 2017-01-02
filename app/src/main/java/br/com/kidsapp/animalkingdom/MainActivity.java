@@ -27,6 +27,6 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         this.crazyBirdGame.resume();
-        new Thread(this.crazyBirdGame).start();
+        new Thread(crazyBirdGame).start();
     }
 }

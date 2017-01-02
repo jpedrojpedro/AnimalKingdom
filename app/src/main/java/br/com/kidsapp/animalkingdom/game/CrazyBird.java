@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import java.util.ArrayList;
 import br.com.kidsapp.animalkingdom.R;
 import br.com.kidsapp.animalkingdom.element.Bird;
 import br.com.kidsapp.animalkingdom.element.DeviceScreen;
@@ -20,13 +22,18 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
     private DeviceScreen screen;
     private Bitmap background;
     private Bird bird;
-    private Pipe pipe;
+    private ArrayList<Pipe> pipes = new ArrayList<>();
 
     public CrazyBird(Context context) {
         super(context);
         this.bird = new Bird();
-        this.pipe = new Pipe();
-        this.screen = new DeviceScreen(getContext());
+        // five pipes
+        this.pipes.add(new Pipe(new Point(1200, 0)));
+        this.pipes.add(new Pipe(new Point(960, 0)));
+        this.pipes.add(new Pipe(new Point(720, 0)));
+        this.pipes.add(new Pipe(new Point(480, 0)));
+        this.pipes.add(new Pipe(new Point(240, 0)));
+        this.screen = DeviceScreen.getInstance(getContext());
         this.background = BitmapFactory.decodeResource(getResources(),
                                                        R.drawable.background);
         this.background = Bitmap.createScaledBitmap(background,
@@ -45,12 +52,14 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
                 continue;
             }
             canvas.drawBitmap(this.background, 0, 0, null);
-            if(pipe.isVisible()) {
-                this.pipe.slide();
-            } else {
-                this.pipe.setInitialPosition();
+            for(Pipe pipe : pipes) {
+                if(pipe.isVisible()) {
+                    pipe.slide();
+                } else {
+                    pipe.setInitialPosition();
+                }
+                pipe.draw(canvas);
             }
-            this.pipe.draw(canvas);
             this.bird.fly(false);
             this.bird.draw(canvas);
             holder.unlockCanvasAndPost(canvas);

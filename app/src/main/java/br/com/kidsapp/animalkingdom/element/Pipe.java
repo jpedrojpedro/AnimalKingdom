@@ -15,8 +15,8 @@ public class Pipe {
     private Point position = new Point();
     private Paint color = new Paint();
 
-    public Pipe() {
-        setInitialPosition();
+    public Pipe(Point initialPosition) {
+        this.position.set(initialPosition.x, initialPosition.y);
         // ARGB => opacity, red, green, blue
         this.color.setColor(0xFF00FF00);
     }

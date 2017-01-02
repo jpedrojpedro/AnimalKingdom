@@ -7,8 +7,10 @@ import android.view.WindowManager;
 
 public class DeviceScreen {
     private DisplayMetrics metrics;
+    // singleton
+    private static DeviceScreen instance = null;
 
-    public DeviceScreen(Context context) {
+    private DeviceScreen(Context context) {
         WindowManager wm =
                 (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -16,7 +18,14 @@ public class DeviceScreen {
         display.getMetrics(metrics);
     }
 
+    public static DeviceScreen getInstance(Context context) {
+        if(instance == null) {
+            instance = new DeviceScreen(context);
+        }
+        return instance;
+    }
+
     public int getHeight() {
-        return this.metrics.heightPixels;
+        return metrics.heightPixels;
     }
 }
