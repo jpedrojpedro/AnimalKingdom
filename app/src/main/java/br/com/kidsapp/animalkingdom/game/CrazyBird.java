@@ -4,14 +4,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import br.com.kidsapp.animalkingdom.R;
 import br.com.kidsapp.animalkingdom.element.Bird;
 import br.com.kidsapp.animalkingdom.element.DeviceScreen;
 import br.com.kidsapp.animalkingdom.element.Pipe;
+// import android.util.Log;
 
-public class CrazyBird extends SurfaceView implements Runnable {
+public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchListener {
     private boolean isPaused = false;
     private final SurfaceHolder holder = getHolder();
     private DeviceScreen screen;
@@ -30,6 +33,7 @@ public class CrazyBird extends SurfaceView implements Runnable {
                                                     background.getWidth(),
                                                     screen.getHeight(),
                                                     false);
+        setOnTouchListener(this);
     }
 
     @Override
@@ -47,9 +51,17 @@ public class CrazyBird extends SurfaceView implements Runnable {
                 this.pipe.setInitialPosition();
             }
             this.pipe.draw(canvas);
+            this.bird.fly(false);
             this.bird.draw(canvas);
             holder.unlockCanvasAndPost(canvas);
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        this.bird.fly(true);
+        // Log.d("ON_TOUCH", "Clicked");
+        return false;
     }
 
     public void pause() {
