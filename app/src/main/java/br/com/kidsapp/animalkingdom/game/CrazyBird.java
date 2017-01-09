@@ -14,19 +14,23 @@ import br.com.kidsapp.animalkingdom.R;
 import br.com.kidsapp.animalkingdom.element.Bird;
 import br.com.kidsapp.animalkingdom.element.DeviceScreen;
 import br.com.kidsapp.animalkingdom.element.Pipe;
-// import android.util.Log;
+import br.com.kidsapp.animalkingdom.element.TimeControl;
 
 public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchListener {
-    private boolean isPaused = false;
+    // constants
     private final SurfaceHolder holder = getHolder();
+    // attributes
+    private boolean isPaused = false;
     private DeviceScreen screen;
     private Bitmap background;
+    private TimeControl time;
     private Bird bird;
     private ArrayList<Pipe> pipes = new ArrayList<>();
 
     public CrazyBird(Context context) {
         super(context);
-        this.bird = new Bird();
+        this.time = new TimeControl();
+        this.bird = new Bird(time);
         // five pipes
         this.pipes.add(new Pipe(new Point(1200, 0)));
         this.pipes.add(new Pipe(new Point(960, 0)));
@@ -60,16 +64,16 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
                 }
                 pipe.draw(canvas);
             }
-            this.bird.fly(false);
+            this.bird.fly();
             this.bird.draw(canvas);
             holder.unlockCanvasAndPost(canvas);
+            this.time.increment();
         }
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        this.bird.fly(true);
-        // Log.d("ON_TOUCH", "Clicked");
+        this.bird.setBoosted(true);
         return false;
     }
 

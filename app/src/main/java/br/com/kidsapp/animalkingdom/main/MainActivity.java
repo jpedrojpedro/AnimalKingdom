@@ -1,8 +1,9 @@
-package br.com.kidsapp.animalkingdom;
+package br.com.kidsapp.animalkingdom.main;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import br.com.kidsapp.animalkingdom.R;
 import br.com.kidsapp.animalkingdom.game.CrazyBird;
 
 public class MainActivity extends Activity {
