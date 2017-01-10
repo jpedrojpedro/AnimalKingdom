@@ -28,4 +28,8 @@ public class DeviceScreen {
     public int getHeight() {
         return metrics.heightPixels;
     }
+
+    public int getWidth() {
+        return metrics.widthPixels;
+    }
 }

@@ -14,7 +14,7 @@ import br.com.kidsapp.animalkingdom.R;
 import br.com.kidsapp.animalkingdom.element.Bird;
 import br.com.kidsapp.animalkingdom.element.DeviceScreen;
 import br.com.kidsapp.animalkingdom.element.Pipe;
-import br.com.kidsapp.animalkingdom.element.TimeControl;
+import br.com.kidsapp.animalkingdom.element.PhysicsControl;
 
 public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchListener {
     // constants
@@ -23,21 +23,30 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
     private boolean isPaused = false;
     private DeviceScreen screen;
     private Bitmap background;
-    private TimeControl time;
+    private PhysicsControl control;
     private Bird bird;
-    private ArrayList<Pipe> pipes = new ArrayList<>();
+    private ArrayList<Pipe> topPipes = new ArrayList<>();
+    private ArrayList<Pipe> bottomPipes = new ArrayList<>();
 
     public CrazyBird(Context context) {
         super(context);
-        this.time = new TimeControl();
-        this.bird = new Bird(time);
-        // five pipes
-        this.pipes.add(new Pipe(new Point(1200, 0)));
-        this.pipes.add(new Pipe(new Point(960, 0)));
-        this.pipes.add(new Pipe(new Point(720, 0)));
-        this.pipes.add(new Pipe(new Point(480, 0)));
-        this.pipes.add(new Pipe(new Point(240, 0)));
+        this.control = new PhysicsControl();
         this.screen = DeviceScreen.getInstance(getContext());
+        this.bird = new Bird(control);
+        // six topPipes top
+        this.topPipes.add(new Pipe(new Point(1080, 0)));
+        this.topPipes.add(new Pipe(new Point(864, 0)));
+        this.topPipes.add(new Pipe(new Point(648, 0)));
+        this.topPipes.add(new Pipe(new Point(432, 0)));
+        this.topPipes.add(new Pipe(new Point(216, 0)));
+        this.topPipes.add(new Pipe(new Point(0, 0)));
+        // six topPipes bottom
+        this.bottomPipes.add(new Pipe(new Point(1080, screen.getHeight())));
+        this.bottomPipes.add(new Pipe(new Point(864, screen.getHeight())));
+        this.bottomPipes.add(new Pipe(new Point(648, screen.getHeight())));
+        this.bottomPipes.add(new Pipe(new Point(432, screen.getHeight())));
+        this.bottomPipes.add(new Pipe(new Point(216, screen.getHeight())));
+        this.bottomPipes.add(new Pipe(new Point(0, screen.getHeight())));
         this.background = BitmapFactory.decodeResource(getResources(),
                                                        R.drawable.background);
         this.background = Bitmap.createScaledBitmap(background,
@@ -56,18 +65,28 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
                 continue;
             }
             canvas.drawBitmap(this.background, 0, 0, null);
-            for(Pipe pipe : pipes) {
+            for(Pipe pipe : topPipes) {
                 if(pipe.isVisible()) {
-                    pipe.slide();
+                    pipe.slide(0);
                 } else {
-                    pipe.setInitialPosition();
+                    pipe.setPosition(new Point(screen.getWidth(), 0));
+                    pipe.setRandomHeight();
+                }
+                pipe.draw(canvas);
+            }
+            for(Pipe pipe : bottomPipes) {
+                if(pipe.isVisible()) {
+                    pipe.slide(screen.getHeight());
+                } else {
+                    pipe.setPosition(new Point(screen.getWidth(), screen.getHeight()));
+                    pipe.setRandomHeight();
                 }
                 pipe.draw(canvas);
             }
             this.bird.fly();
             this.bird.draw(canvas);
             holder.unlockCanvasAndPost(canvas);
-            this.time.increment();
+            this.control.increment();
         }
     }
 

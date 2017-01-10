@@ -1,12 +1,14 @@
 package br.com.kidsapp.animalkingdom.element;
 
-public class TimeControl {
+public class PhysicsControl {
     // constants
     private final float TIME_RATE = 0.04f;
+    private final int GRAVITY = 10;
+    private final int METER_TO_PIXELS = 3780;
     // attributes
     private float timeSpent;
 
-    public TimeControl() {
+    public PhysicsControl() {
         this.timeSpent = 0;
     }
 
@@ -24,5 +26,17 @@ public class TimeControl {
 
     public float getTimeRate() {
         return TIME_RATE;
+    }
+
+    public int getGravity() {
+        return GRAVITY;
+    }
+
+    public int metersToPixels(float meters) {
+        return (int) (meters * METER_TO_PIXELS);
+    }
+
+    public float pixelsToMeters(int pixels) {
+        return pixels / METER_TO_PIXELS;
     }
 }
