@@ -3,48 +3,52 @@ package br.com.kidsapp.animalkingdom.element;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import java.util.Random;
 
 public class Pipe {
     // constants
     private final int BASE = 200;
-    private final int MIN_HEIGHT = 700;
-    private final int SPEED = 10;
-    private final int TIME_SPENT = 1;
+    private final int MIN_HEIGHT = 500;
+    private final int SPEED = 200; // pixels / seconds
     // attributes
-    private Point position = new Point();
+    private Rect rectangle = new Rect();
     private Paint color = new Paint();
     private Random random = new Random();
-    private int height;
+    private PhysicsControl control;
 
-    public Pipe(Point initialPosition) {
-        this.position.set(initialPosition.x, initialPosition.y);
+    public Pipe(PhysicsControl control, Point upper_left) {
+        this.control = control;
+        this.rectangle.set(
+            upper_left.x,
+            upper_left.y,
+            BASE,
+            upper_left.y == 0 ? randomizeHeight() : upper_left.y - randomizeHeight()
+        );
         // ARGB => opacity, red, green, blue
         this.color.setColor(0xFF00FF00);
-        this.setRandomHeight();
     }
 
     public void draw(Canvas canvas) {
-        float x = (float) (position.x - (BASE/2.0));
-        float y = (float) (position.y - (height /2.0));
-        canvas.drawRect(x, y, x + (float) (BASE/2.0),
-                        y + height, color);
+        canvas.drawRect(rectangle, color);
     }
 
     public void slide(int height) {
-        position = new Point(position.x - SPEED * TIME_SPENT, height);
+        this.rectangle.offsetTo(
+            this.rectangle.left - (int) (SPEED * control.getTimeRate()), height
+        );
     }
 
-    public boolean isVisible() {
-        return (float) (position.x + (BASE / 2.0)) >= 0;
+    public void setPosition(Point upper_left) {
+        this.rectangle.offsetTo(upper_left.x, upper_left.y);
     }
 
     public Point getPosition() {
-        return position;
+        return new Point(this.rectangle.left, this.rectangle.bottom);
     }
 
-    public void setPosition(Point position) {
-        this.position = position;
+    public boolean isVisible() {
+        return rectangle.left + BASE >= 0;
     }
 
     public Paint getColor() {
@@ -55,7 +59,11 @@ public class Pipe {
         this.color = color;
     }
 
-    public void setRandomHeight() {
-        height = MIN_HEIGHT + random.nextInt(400);
+    public void setHeight() {
+        this.rectangle.bottom = randomizeHeight();
+    }
+
+    private int randomizeHeight() {
+        return MIN_HEIGHT + random.nextInt(400);
     }
 }

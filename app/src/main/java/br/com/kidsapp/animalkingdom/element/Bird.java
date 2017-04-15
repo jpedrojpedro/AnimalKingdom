@@ -7,20 +7,20 @@ import android.graphics.Point;
 public class Bird {
     // constants
     private final int RADIUS = 50;
-    private final int BOOST = 70;
+    private final int BOOST = 20;
     // attributes
     private Point currentPosition = new Point();
-    private Point lastPosition = new Point();
     private Paint color = new Paint();
     private PhysicsControl control;
     private boolean boosted = false;
+    private float speed;
 
     public Bird(PhysicsControl control) {
         this.control = control;
-        this.lastPosition.set(200, 100);
         this.currentPosition.set(200, 100);
         // ARGB => opacity, red, green, blue
         this.color.setColor(0xFFFF0000);
+        this.speed = 0;
     }
 
     public void draw(Canvas canvas) {
@@ -29,14 +29,13 @@ public class Bird {
     }
 
     public void fly() {
-        float speed = control.pixelsToMeters(currentPosition.y - lastPosition.y) / control.getTimeRate();
         float acceleration = (control.getGravity() * control.getTimeSpent() * control.getTimeSpent()) / 2.0f;
-        lastPosition = currentPosition;
         currentPosition = new Point(
             currentPosition.x,
-            (int)((currentPosition.y - (boosted ? BOOST : 0)) + speed * control.getTimeSpent() + acceleration)
+            (int)(currentPosition.y - speed * control.getTimeSpent() + acceleration)
         );
         if(boosted) {
+            this.speed = BOOST - control.getGravity() * control.getTimeSpent();
             this.control.setTimeSpent(0);
             this.boosted = false;
         }

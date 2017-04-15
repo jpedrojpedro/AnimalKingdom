@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -33,20 +34,20 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
         this.control = new PhysicsControl();
         this.screen = DeviceScreen.getInstance(getContext());
         this.bird = new Bird(control);
-        // six topPipes top
-        this.topPipes.add(new Pipe(new Point(1080, 0)));
-        this.topPipes.add(new Pipe(new Point(864, 0)));
-        this.topPipes.add(new Pipe(new Point(648, 0)));
-        this.topPipes.add(new Pipe(new Point(432, 0)));
-        this.topPipes.add(new Pipe(new Point(216, 0)));
-        this.topPipes.add(new Pipe(new Point(0, 0)));
-        // six topPipes bottom
-        this.bottomPipes.add(new Pipe(new Point(1080, screen.getHeight())));
-        this.bottomPipes.add(new Pipe(new Point(864, screen.getHeight())));
-        this.bottomPipes.add(new Pipe(new Point(648, screen.getHeight())));
-        this.bottomPipes.add(new Pipe(new Point(432, screen.getHeight())));
-        this.bottomPipes.add(new Pipe(new Point(216, screen.getHeight())));
-        this.bottomPipes.add(new Pipe(new Point(0, screen.getHeight())));
+        // six top Pipes
+        this.topPipes.add(new Pipe(control, new Point(0, 0)));
+        //this.topPipes.add(new Pipe(control, new Point(216, 0)));
+        //this.topPipes.add(new Pipe(control, new Point(432, 0)));
+        //this.topPipes.add(new Pipe(control, new Point(648, 0)));
+        //this.topPipes.add(new Pipe(control, new Point(864, 0)));
+        //this.topPipes.add(new Pipe(control, new Point(1080, 0)));
+        // six bottom Pipes
+        this.bottomPipes.add(new Pipe(control, new Point(0, screen.getHeight())));
+        //this.bottomPipes.add(new Pipe(control, new Point(216, screen.getHeight())));
+        //this.bottomPipes.add(new Pipe(control, new Point(432, screen.getHeight())));
+        //this.bottomPipes.add(new Pipe(control, new Point(648, screen.getHeight())));
+        //this.bottomPipes.add(new Pipe(control, new Point(864, screen.getHeight())));
+        //this.bottomPipes.add(new Pipe(control, new Point(1080, screen.getHeight())));
         this.background = BitmapFactory.decodeResource(getResources(),
                                                        R.drawable.background);
         this.background = Bitmap.createScaledBitmap(background,
@@ -66,24 +67,27 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
             }
             canvas.drawBitmap(this.background, 0, 0, null);
             for(Pipe pipe : topPipes) {
-                if(pipe.isVisible()) {
+                Log.d("pipe_position - TOP", String.format("(%d, %d)", pipe.getPosition().x, pipe.getPosition().y));
+                if (pipe.isVisible()) {
                     pipe.slide(0);
                 } else {
                     pipe.setPosition(new Point(screen.getWidth(), 0));
-                    pipe.setRandomHeight();
+                    pipe.setHeight();
                 }
                 pipe.draw(canvas);
             }
             for(Pipe pipe : bottomPipes) {
+                Log.d("pipe_position - BOTTOM", String.format("(%d, %d)", pipe.getPosition().x, pipe.getPosition().y));
                 if(pipe.isVisible()) {
                     pipe.slide(screen.getHeight());
                 } else {
+                    Log.d("screen_height", String.format("%d", screen.getHeight()));
                     pipe.setPosition(new Point(screen.getWidth(), screen.getHeight()));
-                    pipe.setRandomHeight();
+                    pipe.setHeight();
                 }
                 pipe.draw(canvas);
             }
-            this.bird.fly();
+            //this.bird.fly();
             this.bird.draw(canvas);
             holder.unlockCanvasAndPost(canvas);
             this.control.increment();

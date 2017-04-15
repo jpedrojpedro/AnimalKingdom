@@ -2,7 +2,7 @@ package br.com.kidsapp.animalkingdom.element;
 
 public class PhysicsControl {
     // constants
-    private final float TIME_RATE = 0.04f;
+    private final float TIME_RATE = 0.08f;
     private final int GRAVITY = 10;
     private final int METER_TO_PIXELS = 3780;
     // attributes
