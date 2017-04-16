@@ -5,6 +5,7 @@ public class PhysicsControl {
     private final float TIME_RATE = 0.08f;
     private final int GRAVITY = 10;
     private final int METER_TO_PIXELS = 3780;
+    private final int SPEED = 216; // pixels / seconds
     // attributes
     private float timeSpent;
 
@@ -31,6 +32,8 @@ public class PhysicsControl {
     public int getGravity() {
         return GRAVITY;
     }
+
+    public int getSpeed() { return SPEED; }
 
     public int metersToPixels(float meters) {
         return (int) (meters * METER_TO_PIXELS);

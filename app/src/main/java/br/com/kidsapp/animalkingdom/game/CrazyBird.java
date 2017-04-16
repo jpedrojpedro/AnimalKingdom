@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Point;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -13,9 +11,10 @@ import android.view.View;
 import java.util.ArrayList;
 import br.com.kidsapp.animalkingdom.R;
 import br.com.kidsapp.animalkingdom.element.Bird;
+import br.com.kidsapp.animalkingdom.element.BottomPipe;
 import br.com.kidsapp.animalkingdom.element.DeviceScreen;
-import br.com.kidsapp.animalkingdom.element.Pipe;
 import br.com.kidsapp.animalkingdom.element.PhysicsControl;
+import br.com.kidsapp.animalkingdom.element.TopPipe;
 
 public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchListener {
     // constants
@@ -26,8 +25,8 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
     private Bitmap background;
     private PhysicsControl control;
     private Bird bird;
-    private ArrayList<Pipe> topPipes = new ArrayList<>();
-    private ArrayList<Pipe> bottomPipes = new ArrayList<>();
+    private ArrayList<TopPipe> topPipes = new ArrayList<>();
+    private ArrayList<BottomPipe> bottomPipes = new ArrayList<>();
 
     public CrazyBird(Context context) {
         super(context);
@@ -35,19 +34,19 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
         this.screen = DeviceScreen.getInstance(getContext());
         this.bird = new Bird(control);
         // six top Pipes
-        this.topPipes.add(new Pipe(control, new Point(0, 0)));
-        //this.topPipes.add(new Pipe(control, new Point(216, 0)));
-        //this.topPipes.add(new Pipe(control, new Point(432, 0)));
-        //this.topPipes.add(new Pipe(control, new Point(648, 0)));
-        //this.topPipes.add(new Pipe(control, new Point(864, 0)));
-        //this.topPipes.add(new Pipe(control, new Point(1080, 0)));
+        this.topPipes.add(new TopPipe(control, screen, 0));
+        //this.topPipes.add(new TopPipe(control, screen, 216));
+        //this.topPipes.add(new TopPipe(control, screen, 432));
+        //this.topPipes.add(new TopPipe(control, screen, 648));
+        //this.topPipes.add(new TopPipe(control, screen, 864));
+        //this.topPipes.add(new TopPipe(control, screen, 1080));
         // six bottom Pipes
-        this.bottomPipes.add(new Pipe(control, new Point(0, screen.getHeight())));
-        //this.bottomPipes.add(new Pipe(control, new Point(216, screen.getHeight())));
-        //this.bottomPipes.add(new Pipe(control, new Point(432, screen.getHeight())));
-        //this.bottomPipes.add(new Pipe(control, new Point(648, screen.getHeight())));
-        //this.bottomPipes.add(new Pipe(control, new Point(864, screen.getHeight())));
-        //this.bottomPipes.add(new Pipe(control, new Point(1080, screen.getHeight())));
+        this.bottomPipes.add(new BottomPipe(control, screen, 0));
+        //this.bottomPipes.add(new BottomPipe(control, screen, 216));
+        //this.bottomPipes.add(new BottomPipe(control, screen, 432));
+        //this.bottomPipes.add(new BottomPipe(control, screen, 648));
+        //this.bottomPipes.add(new BottomPipe(control, screen, 864));
+        //this.bottomPipes.add(new BottomPipe(control, screen, 1080));
         this.background = BitmapFactory.decodeResource(getResources(),
                                                        R.drawable.background);
         this.background = Bitmap.createScaledBitmap(background,
@@ -66,23 +65,20 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
                 continue;
             }
             canvas.drawBitmap(this.background, 0, 0, null);
-            for(Pipe pipe : topPipes) {
-                Log.d("pipe_position - TOP", String.format("(%d, %d)", pipe.getPosition().x, pipe.getPosition().y));
+            for(TopPipe pipe : topPipes) {
                 if (pipe.isVisible()) {
-                    pipe.slide(0);
+                    pipe.slide();
                 } else {
-                    pipe.setPosition(new Point(screen.getWidth(), 0));
+                    pipe.setInitialPosition();
                     pipe.setHeight();
                 }
                 pipe.draw(canvas);
             }
-            for(Pipe pipe : bottomPipes) {
-                Log.d("pipe_position - BOTTOM", String.format("(%d, %d)", pipe.getPosition().x, pipe.getPosition().y));
+            for(BottomPipe pipe : bottomPipes) {
                 if(pipe.isVisible()) {
-                    pipe.slide(screen.getHeight());
+                    pipe.slide();
                 } else {
-                    Log.d("screen_height", String.format("%d", screen.getHeight()));
-                    pipe.setPosition(new Point(screen.getWidth(), screen.getHeight()));
+                    pipe.setInitialPosition();
                     pipe.setHeight();
                 }
                 pipe.draw(canvas);

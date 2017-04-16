@@ -2,28 +2,25 @@ package br.com.kidsapp.animalkingdom.element;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import java.util.Random;
 
-public class Pipe {
+public class BottomPipe {
     // constants
     private final int BASE = 200;
-    private final int MIN_HEIGHT = 500;
-    private final int SPEED = 200; // pixels / seconds
     // attributes
     private Rect rectangle = new Rect();
     private Paint color = new Paint();
     private Random random = new Random();
     private PhysicsControl control;
+    private DeviceScreen screen;
 
-    public Pipe(PhysicsControl control, Point upper_left) {
+    public BottomPipe(PhysicsControl control, DeviceScreen screen, int position) {
         this.control = control;
+        this.screen = screen;
         this.rectangle.set(
-            upper_left.x,
-            upper_left.y,
-            BASE,
-            upper_left.y == 0 ? randomizeHeight() : upper_left.y - randomizeHeight()
+            position, (screen.getHeight()/2) - randomizeHeight(),
+            BASE, screen.getHeight()
         );
         // ARGB => opacity, red, green, blue
         this.color.setColor(0xFF00FF00);
@@ -33,18 +30,15 @@ public class Pipe {
         canvas.drawRect(rectangle, color);
     }
 
-    public void slide(int height) {
+    public void slide() {
         this.rectangle.offsetTo(
-            this.rectangle.left - (int) (SPEED * control.getTimeRate()), height
+            this.rectangle.left - (int) (control.getSpeed() * control.getTimeRate()),
+            screen.getHeight()
         );
     }
 
-    public void setPosition(Point upper_left) {
-        this.rectangle.offsetTo(upper_left.x, upper_left.y);
-    }
-
-    public Point getPosition() {
-        return new Point(this.rectangle.left, this.rectangle.bottom);
+    public void setInitialPosition() {
+        this.rectangle.offsetTo(screen.getWidth(), screen.getHeight()/2);
     }
 
     public boolean isVisible() {
@@ -64,6 +58,6 @@ public class Pipe {
     }
 
     private int randomizeHeight() {
-        return MIN_HEIGHT + random.nextInt(400);
+        return random.nextInt(300);
     }
 }
