@@ -33,20 +33,20 @@ public class CrazyBird extends SurfaceView implements Runnable, View.OnTouchList
         this.control = new PhysicsControl();
         this.screen = DeviceScreen.getInstance(getContext());
         this.bird = new Bird(control);
-        // six top Pipes
+        // five top Pipes
         this.topPipes.add(new TopPipe(control, screen, 0));
-        //this.topPipes.add(new TopPipe(control, screen, 216));
-        //this.topPipes.add(new TopPipe(control, screen, 432));
-        //this.topPipes.add(new TopPipe(control, screen, 648));
-        //this.topPipes.add(new TopPipe(control, screen, 864));
-        //this.topPipes.add(new TopPipe(control, screen, 1080));
-        // six bottom Pipes
+        this.topPipes.add(new TopPipe(control, screen, 220));
+        this.topPipes.add(new TopPipe(control, screen, 440));
+        this.topPipes.add(new TopPipe(control, screen, 660));
+        this.topPipes.add(new TopPipe(control, screen, 880));
+        this.topPipes.add(new TopPipe(control, screen, 1100));
+        // five bottom Pipes
         this.bottomPipes.add(new BottomPipe(control, screen, 0));
-        //this.bottomPipes.add(new BottomPipe(control, screen, 216));
-        //this.bottomPipes.add(new BottomPipe(control, screen, 432));
-        //this.bottomPipes.add(new BottomPipe(control, screen, 648));
-        //this.bottomPipes.add(new BottomPipe(control, screen, 864));
-        //this.bottomPipes.add(new BottomPipe(control, screen, 1080));
+        this.bottomPipes.add(new BottomPipe(control, screen, 216));
+        this.bottomPipes.add(new BottomPipe(control, screen, 432));
+        this.bottomPipes.add(new BottomPipe(control, screen, 648));
+        this.bottomPipes.add(new BottomPipe(control, screen, 864));
+        this.bottomPipes.add(new BottomPipe(control, screen, 1080));
         this.background = BitmapFactory.decodeResource(getResources(),
                                                        R.drawable.background);
         this.background = Bitmap.createScaledBitmap(background,
